@@ -3,476 +3,432 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sagordari Michael Madhusudhan Institution</title>
-  <meta name="description" content="Sagordari Michael Madhusudhan Datta School - একটি শিক্ষার আলো ছড়ানোর প্রতিষ্ঠান।" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Admin Panel — SMMD School</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <style>
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 9999;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
-      align-items: center; justify-content: center; padding: 2rem;
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
+    :root {
+      --bg: #0a0a0f; --bg2: #111118; --card: #16161f; --card2: #1c1c28;
+      --accent: #c9a84c; --accent-dim: rgba(201,168,76,0.12);
+      --text: #f0ede6; --text2: #9a9490; --text3: #5a5860;
+      --border: rgba(201,168,76,0.15); --border2: rgba(255,255,255,0.06);
+      --green: #4ade80; --red: #f87171; --blue: #60a5fa;
+      --font: 'DM Sans', sans-serif; --display: 'Playfair Display', serif;
+      --r: 10px; --tr: all 0.2s ease;
     }
-    .modal-box {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 2.5rem; max-width: 520px; width: 100%;
-      position: relative;
-    }
-    .modal-close {
-      position: absolute; top: 1rem; right: 1rem; background: none; border: none;
-      color: var(--text-muted); font-size: 1.4rem; cursor: pointer; transition: var(--transition);
-    }
-    .modal-close:hover { color: var(--text-primary); }
-    .modal-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; }
-    .modal-body { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
-    .principal-card {
-      background: var(--bg-card); border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg); padding: 2rem;
-      display: flex; gap: 1.5rem; align-items: flex-start; margin-top: 2rem;
-    }
-    .principal-avatar {
-      width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
-      background: var(--accent-dim); border: 2px solid var(--border);
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+    /* LOGIN */
+    .login-screen {
+      position: fixed; inset: 0; background: var(--bg); z-index: 9999;
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--accent);
     }
-    .principal-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
-    .principal-title { font-size: 12px; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
-    .principal-quote { font-size: 13px; color: var(--text-secondary); line-height: 1.7; font-style: italic; }
+    .login-box {
+      background: var(--card); border: 1px solid var(--border2); border-radius: 20px;
+      padding: 2.5rem; width: 360px;
+    }
+    .login-logo { font-family: var(--display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .login-sub { font-size: 13px; color: var(--text2); margin-bottom: 2rem; }
+    .field { margin-bottom: 1.25rem; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    .field input { width: 100%; padding: 11px 14px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--font); font-size: 14px; outline: none; transition: var(--tr); }
+    .field input:focus { border-color: var(--accent); }
+    .login-btn { width: 100%; padding: 12px; background: var(--accent); color: var(--bg); border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--tr); font-family: var(--font); }
+    .login-btn:hover { background: #e8c97a; }
+    .login-hint { font-size: 12px; color: var(--text3); text-align: center; margin-top: 1rem; }
+    .login-error { color: var(--red); font-size: 13px; margin-top: 0.5rem; display: none; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px; flex-shrink: 0; background: var(--bg2);
+      border-right: 1px solid var(--border2); display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+    }
+    .sidebar-brand {
+      padding: 1.5rem; border-bottom: 1px solid var(--border2);
+      font-family: var(--display); font-size: 1rem; font-weight: 700; color: var(--text);
+    }
+    .sidebar-brand span { display: block; font-family: var(--font); font-size: 11px; color: var(--accent); font-weight: 500; margin-top: 2px; }
+    .sidebar-nav { padding: 1rem 0.75rem; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text2);
+      cursor: pointer; transition: var(--tr); text-decoration: none;
+    }
+    .nav-item:hover { background: var(--card); color: var(--text); }
+    .nav-item.active { background: var(--accent-dim); color: var(--accent); }
+    .nav-item i { font-size: 1.1rem; }
+    .nav-section { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); padding: 12px 12px 6px; margin-top: 8px; }
+    .sidebar-footer { padding: 1rem 0.75rem; border-top: 1px solid var(--border2); }
+    .logout-btn {
+      width: 100%; padding: 10px 12px; background: none; border: 1px solid var(--border2);
+      border-radius: 8px; color: var(--text2); font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; transition: var(--tr); font-family: var(--font);
+    }
+    .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* MAIN */
+    .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar {
+      padding: 1rem 2rem; background: var(--bg2); border-bottom: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-title { font-size: 17px; font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-badge {
+      padding: 5px 14px; background: var(--accent-dim); border: 1px solid var(--border);
+      border-radius: 100px; font-size: 12px; color: var(--accent); font-weight: 500;
+    }
+    .content { padding: 2rem; flex: 1; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--card); border: 1px solid var(--border2); border-radius: var(--r); padding: 1.25rem; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-dim); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: var(--accent); font-size: 1.2rem; }
+    .stat-num { font-family: var(--display); font-size: 2rem; font-weight: 700; color: var(--text); }
+    .stat-label { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+    /* TABLE */
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .panel-title { font-family: var(--display); font-size: 1.5rem; font-weight: 700; }
+    .add-btn { padding: 10px 20px; background: var(--accent); color: var(--bg); border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: var(--font); transition: var(--tr); }
+    .add-btn:hover { background: #e8c97a; }
+    .table-wrap { background: var(--card); border: 1px solid var(--border2); border-radius: var(--r); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; background: var(--bg2); border-bottom: 1px solid var(--border2); }
+    td { padding: 13px 16px; font-size: 14px; color: var(--text2); border-bottom: 1px solid var(--border2); }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--card2); color: var(--text); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .badge-exam { background: rgba(239,68,68,0.15); color: var(--red); }
+    .badge-event { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-holiday { background: rgba(96,165,250,0.15); color: var(--blue); }
+    .badge-admission { background: var(--accent-dim); color: var(--accent); }
+    .action-btns { display: flex; gap: 6px; }
+    .edit-btn, .del-btn { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; border: none; cursor: pointer; transition: var(--tr); font-family: var(--font); }
+    .edit-btn { background: rgba(96,165,250,0.1); color: var(--blue); }
+    .edit-btn:hover { background: rgba(96,165,250,0.2); }
+    .del-btn { background: rgba(239,68,68,0.1); color: var(--red); }
+    .del-btn:hover { background: rgba(239,68,68,0.2); }
+
+    /* MODAL */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 9000; align-items: center; justify-content: center; padding: 2rem; }
+    .modal.open { display: flex; }
+    .modal-box { background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 2rem; width: 100%; max-width: 480px; }
+    .modal-title { font-family: var(--display); font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 7px; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 11px 14px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--font); font-size: 14px; outline: none; transition: var(--tr); appearance: none; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-textarea { resize: vertical; min-height: 90px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
+    .save-btn { flex: 1; padding: 11px; background: var(--accent); color: var(--bg); border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: var(--tr); }
+    .save-btn:hover { background: #e8c97a; }
+    .cancel-btn { padding: 11px 20px; background: none; border: 1px solid var(--border2); border-radius: 8px; color: var(--text2); font-size: 14px; cursor: pointer; font-family: var(--font); transition: var(--tr); }
+    .cancel-btn:hover { border-color: var(--text); color: var(--text); }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--card); border: 1px solid var(--green); border-radius: 10px; padding: 14px 20px; font-size: 14px; color: var(--green); display: none; z-index: 9999; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .toast.show { display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; } .stats-grid { grid-template-columns: repeat(2,1fr); } }
   </style>
 </head>
 <body>
 
-<!-- HEADER TOP -->
-<header class="header-top">
-  <div class="header-inner">
-    <div class="header-brand">
-      <div class="header-logo">
-        <img src="assets/images/download.jpeg" alt="School Logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
-      </div>
-      <div class="header-text">
-        <h2 class="header-name">সাগরদাঁড়ি মাইকেল মধুসূদন প্রতিষ্ঠান</h2>
-        <p class="header-sub">Sagordari Michael Madhusudhan Institution, Khulna</p>
-      </div>
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">SMMD School</div>
+    <div class="login-sub">Admin Panel — অনুগ্রহ করে লগইন করুন</div>
+    <div class="field">
+      <label>ব্যবহারকারীর নাম</label>
+      <input type="text" id="loginUser" placeholder="admin" />
     </div>
-  </div>
-</header>
-
-<!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <div class="nav-links">
-      <a href="#about">আমাদের সম্পর্কে</a>
-      <a href="#notices">নোটিশ বোর্ড</a>
-      <a href="#teachers">শিক্ষকমণ্ডলী</a>
-      <a href="#results">ফলাফল</a>
-      <a href="#gallery">গ্যালারি</a>
-      <a href="#contact">যোগাযোগ</a>
-      <a href="#admission" class="nav-cta">ভর্তি তথ্য</a>
+    <div class="field">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
     </div>
-    <div class="hamburger" id="hamburger">
-      <span></span><span></span><span></span>
-    </div>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about">আমাদের সম্পর্কে</a>
-    <a href="#notices">নোটিশ বোর্ড</a>
-    <a href="#teachers">শিক্ষকমণ্ডলী</a>
-    <a href="#results">ফলাফল</a>
-    <a href="#gallery">গ্যালারি</a>
-    <a href="#contact">যোগাযোগ</a>
-    <a href="#admission">ভর্তি তথ্য</a>
-  </div>
-</nav>
-
-<!-- NOTICE TICKER -->
-<div class="notice-bar">
-  <span class="notice-label">সর্বশেষ</span>
-  <div class="ticker-wrap">
-    <div class="ticker">
-      <span>২০২৫ সালের JSC পরীক্ষার সময়সূচি প্রকাশিত হয়েছে</span>
-      <span>৬ষ্ঠ শ্রেণিতে ভর্তি আবেদন চলছে — ৩১ জানুয়ারি শেষ তারিখ</span>
-      <span>বার্ষিক ক্রীড়া প্রতিযোগিতা আগামী ১৫ ফেব্রুয়ারি</span>
-      <span>SSC পরীক্ষার ফলাফলে বিদ্যালয়ের সাফল্য ৯৮%</span>
-      <span>নতুন কম্পিউটার ল্যাব উদ্বোধন হতে যাচ্ছে</span>
-      <span>২০২৫ সালের JSC পরীক্ষার সময়সূচি প্রকাশিত হয়েছে</span>
-      <span>৬ষ্ঠ শ্রেণিতে ভর্তি আবেদন চলছে — ৩১ জানুয়ারি শেষ তারিখ</span>
-      <span>বার্ষিক ক্রীড়া প্রতিযোগিতা আগামী ১৫ ফেব্রুয়ারি</span>
-      <span>SSC পরীক্ষার ফলাফলে বিদ্যালয়ের সাফল্য ৯৮%</span>
-      <span>নতুন কম্পিউটার ল্যাব উদ্বোধন হতে যাচ্ছে</span>
-    </div>
+    <div class="login-error" id="loginError">❌ ব্যবহারকারীর নাম বা পাসওয়ার্ড ভুল</div>
+    <button class="login-btn" onclick="doLogin()">লগইন করুন</button>
+    <div class="login-hint">ডিফল্ট: admin / smmd2025</div>
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge">
-      <div class="hero-badge-dot"></div>
-      প্রতিষ্ঠিত ১৯৬৫ · সাগরদাঁড়ি
-    </div>
-    <h1 class="hero-title">
-      সাগরদাঁড়ি মাইকেল<br>
-      <span class="accent">মধুসূদন প্রতিষ্ঠান</span>
-      <span class="line2">আলোর পথে এগিয়ে চলো</span>
-    </h1>
-    <p class="hero-desc">
-      সাগরদাঁড়ির বুকে ৬০ বছরেরও বেশি সময় ধরে শিক্ষার আলো ছড়িয়ে আসছে আমাদের বিদ্যালয়।
-      মহাকবি মাইকেল মধুসূদন দত্তের নামাঙ্কিত এই প্রতিষ্ঠান প্রজন্মের পর প্রজন্ম গড়ে তুলছে।
-    </p>
-    <div class="hero-actions">
-      <a href="#admission" class="btn-primary">
-        <i class="ti ti-school"></i> ভর্তি তথ্য জানুন
-      </a>
-      <a href="#about" class="btn-outline">
-        <i class="ti ti-info-circle"></i> আমাদের সম্পর্কে
-      </a>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="hero-stat-num" data-target="60" data-suffix="+">0+</div>
-        <div class="hero-stat-label">বছরের অভিজ্ঞতা</div>
-      </div>
-      <div>
-        <div class="hero-stat-num" data-target="1200" data-suffix="+">0+</div>
-        <div class="hero-stat-label">শিক্ষার্থী</div>
-      </div>
-      <div>
-        <div class="hero-stat-num" data-target="45" data-suffix="+">0+</div>
-        <div class="hero-stat-label">অভিজ্ঞ শিক্ষক</div>
-      </div>
-      <div>
-        <div class="hero-stat-num" data-target="98" data-suffix="%">0%</div>
-        <div class="hero-stat-label">পাসের হার</div>
-      </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    SMMD School
+    <span>Admin Dashboard</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">মূল</div>
+    <div class="nav-item active" onclick="showPanel('dashboard', this)"><i class="ti ti-layout-dashboard"></i> ড্যাশবোর্ড</div>
+    <div class="nav-section">পরিচালনা</div>
+    <div class="nav-item" onclick="showPanel('notices', this)"><i class="ti ti-bell"></i> নোটিশ বোর্ড</div>
+    <div class="nav-item" onclick="showPanel('results', this)"><i class="ti ti-trophy"></i> পরীক্ষার ফলাফল</div>
+    <div class="nav-item" onclick="showPanel('teachers', this)"><i class="ti ti-users"></i> শিক্ষকমণ্ডলী</div>
+    <div class="nav-item" onclick="showPanel('admissions', this)"><i class="ti ti-school"></i> ভর্তির আবেদন</div>
+    <div class="nav-section">সেটিং</div>
+    <div class="nav-item" onclick="showPanel('settings', this)"><i class="ti ti-settings"></i> স্কুলের তথ্য</div>
+    <div class="nav-item" onclick="showPanel('password', this)"><i class="ti ti-lock"></i> পাসওয়ার্ড</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> লগআউট</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">ড্যাশবোর্ড</div>
+    <div class="topbar-right">
+      <span class="topbar-badge"><i class="ti ti-circle-check" style="color:var(--green)"></i> লাইভ সাইট</span>
+      <a href="../index.html" target="_blank" style="font-size:13px;color:var(--text2);text-decoration:none;">🌐 ওয়েবসাইট দেখুন</a>
     </div>
   </div>
-</section>
+  <div class="content">
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-inner">
-    <div class="about-grid">
-      <div class="about-visual reveal">
-        <img src="assets/images/school-bg.jpg.jpg" alt="School Building" style="width:100%;height:100%;object-fit:cover;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.3);" />
-        <div class="about-badge-float">
-          <span class="year">১৯৬৫</span>
-          <span class="label">থেকে শিক্ষার আলো<br>ছড়িয়ে যাচ্ছে</span>
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-users"></i></div>
+          <div class="stat-num" id="s-students">1,200</div>
+          <div class="stat-label">মোট শিক্ষার্থী</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-chalkboard"></i></div>
+          <div class="stat-num" id="s-teachers">45</div>
+          <div class="stat-label">মোট শিক্ষক</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-bell"></i></div>
+          <div class="stat-num" id="s-notices">6</div>
+          <div class="stat-label">সক্রিয় নোটিশ</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-file-text"></i></div>
+          <div class="stat-num" id="s-apps">12</div>
+          <div class="stat-label">নতুন আবেদন</div>
         </div>
       </div>
-      <div class="about-text reveal">
-        <span class="section-tag">আমাদের সম্পর্কে</span>
-        <h2 class="section-title">শিক্ষা, সংস্কৃতি ও মানবতার<br>বিদ্যাপীঠ</h2>
-        <p class="section-desc" style="margin-bottom:1rem;">
-          সাগরদাঁড়ি মাইকেল মধুসূদন দত্ত বিদ্যালয় — মহাকবি মাইকেল মধুসূদন দত্তের জন্মস্থান সাগরদাঁড়িতে
-          অবস্থিত এই বিদ্যালয়টি ১৯৬৫ সাল থেকে শিক্ষার আলো ছড়িয়ে আসছে।
-        </p>
-        <p class="section-desc">
-          আমাদের লক্ষ্য শুধু পাঠ্যপুস্তকের জ্ঞান নয় — মানবিক মূল্যবোধ, সৃজনশীলতা এবং নেতৃত্বের গুণাবলী
-          বিকাশের মাধ্যমে আগামীর সুনাগরিক গড়ে তোলা।
-        </p>
-        <div class="feature-pills">
-          <span class="pill"><span class="icon">🏆</span> SSC পাসের হার ৯৮%</span>
-          <span class="pill"><span class="icon">🔬</span> আধুনিক বিজ্ঞান ল্যাব</span>
-          <span class="pill"><span class="icon">💻</span> কম্পিউটার ল্যাব</span>
-          <span class="pill"><span class="icon">📚</span> সমৃদ্ধ গ্রন্থাগার</span>
-          <span class="pill"><span class="icon">⚽</span> খেলার মাঠ</span>
-          <span class="pill"><span class="icon">🎭</span> সাংস্কৃতিক কার্যক্রম</span>
-        </div>
-        <div class="principal-card reveal">
-          <div class="principal-avatar">PN</div>
-          <div>
-            <div class="principal-name">জনাব মোঃ আব্দুর রহিম</div>
-            <div class="principal-title">প্রধান শিক্ষক</div>
-            <div class="principal-quote">
-              "আমরা বিশ্বাস করি প্রতিটি শিশুর মধ্যে অপার সম্ভাবনা লুকিয়ে আছে।
-              আমাদের দায়িত্ব সেই সম্ভাবনাকে জাগিয়ে তোলা।"
-            </div>
-          </div>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;">
+        <h3 style="font-family:var(--display);font-size:1.2rem;margin-bottom:1rem;">দ্রুত নির্দেশিকা</h3>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:14px;color:var(--text2);display:flex;gap:8px;"><span style="color:var(--accent)">→</span> বাম মেনু থেকে <strong style="color:var(--text)">নোটিশ বোর্ড</strong> এ গিয়ে নতুন নোটিশ যোগ করুন</li>
+          <li style="font-size:14px;color:var(--text2);display:flex;gap:8px;"><span style="color:var(--accent)">→</span> <strong style="color:var(--text)">পরীক্ষার ফলাফল</strong> এ গিয়ে SSC/JSC ফলাফল আপডেট করুন</li>
+          <li style="font-size:14px;color:var(--text2);display:flex;gap:8px;"><span style="color:var(--accent)">→</span> <strong style="color:var(--text)">শিক্ষকমণ্ডলী</strong> এ শিক্ষকদের তথ্য যোগ/সম্পাদনা করুন</li>
+          <li style="font-size:14px;color:var(--text2);display:flex;gap:8px;"><span style="color:var(--accent)">→</span> <strong style="color:var(--text)">ভর্তির আবেদন</strong> এ নতুন আবেদনগুলো দেখুন</li>
+          <li style="font-size:14px;color:var(--text2);display:flex;gap:8px;"><span style="color:var(--accent)">→</span> <strong style="color:var(--text)">স্কুলের তথ্য</strong> এ ফোন, ঠিকানা, ইমেইল আপডেট করুন</li>
+        </ul>
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(201,168,76,0.06);border:1px solid var(--border);border-radius:8px;">
+          <p style="font-size:13px;color:var(--text2);">⚠️ <strong style="color:var(--accent)">গুরুত্বপূর্ণ:</strong> এই admin panel টি demo/local mode এ চলছে। Production এ deploy করলে PHP/Node.js backend দিয়ে ডেটা real database এ সংরক্ষণ হবে। নিচের README.md দেখুন।</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- NOTICE BOARD -->
-<section id="notices">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-tag">নোটিশ বোর্ড</span>
-      <h2 class="section-title">সর্বশেষ বিজ্ঞপ্তি</h2>
-      <p class="section-desc">গুরুত্বপূর্ণ তথ্য ও ঘোষণা সম্পর্কে সবসময় আপডেট থাকুন।</p>
-    </div>
-    <div class="notice-grid">
-      <div class="notice-card reveal" onclick="openNotice('JSC পরীক্ষার সময়সূচি ২০২৫', 'জুনিয়র স্কুল সার্টিফিকেট (JSC) পরীক্ষা আগামী ১ নভেম্বর ২০২৫ থেকে শুরু হবে। সকল পরীক্ষার্থীকে নিজ নিজ প্রবেশপত্র ১৫ অক্টোবরের মধ্যে সংগ্রহ করতে হবে।')">
-        <div class="notice-meta">
-          <span class="notice-date"><i class="ti ti-calendar"></i> ১৫ জানুয়ারি, ২০২৫</span>
-          <span class="notice-badge badge-exam">পরীক্ষা</span>
-        </div>
-        <div class="notice-title">JSC পরীক্ষার সময়সূচি ২০২৫</div>
-        <div class="notice-body">আসন্ন JSC পরীক্ষার পূর্ণ সময়সূচি প্রকাশিত হয়েছে। সকল পরীক্ষার্থীরা বিস্তারিত জানতে ক্লিক করুন।</div>
+    <!-- NOTICES -->
+    <div class="panel" id="panel-notices">
+      <div class="panel-header">
+        <div class="panel-title">নোটিশ বোর্ড</div>
+        <button class="add-btn" onclick="openModal('notice')"><i class="ti ti-plus"></i> নতুন নোটিশ</button>
       </div>
-      <div class="notice-card reveal" onclick="openNotice('৬ষ্ঠ শ্রেণিতে ভর্তি বিজ্ঞপ্তি ২০২৫', '২০২৫-২০২৬ শিক্ষাবর্ষে ৬ষ্ঠ শ্রেণিতে ভর্তির জন্য আবেদন চলছে। আবেদনের শেষ তারিখ ৩১ জানুয়ারি ২০২৫। ভর্তি পরীক্ষা অনুষ্ঠিত হবে ৫ ফেব্রুয়ারি ২০২৫।')">
-        <div class="notice-meta">
-          <span class="notice-date"><i class="ti ti-calendar"></i> ১০ জানুয়ারি, ২০২৫</span>
-          <span class="notice-badge badge-admission">ভর্তি</span>
-        </div>
-        <div class="notice-title">৬ষ্ঠ শ্রেণিতে ভর্তি বিজ্ঞপ্তি ২০২৫</div>
-        <div class="notice-body">নতুন শিক্ষাবর্ষে ৬ষ্ঠ শ্রেণিতে ভর্তির আবেদন শুরু হয়েছে। আসন সংখ্যা সীমিত।</div>
-      </div>
-      <div class="notice-card reveal" onclick="openNotice('বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৫', 'আগামী ১৫ ফেব্রুয়ারি ২০২৫ তারিখে বিদ্যালয়ের বার্ষিক ক্রীড়া প্রতিযোগিতা অনুষ্ঠিত হবে। সকল শিক্ষার্থীদের অংশগ্রহণ বাধ্যতামূলক।')">
-        <div class="notice-meta">
-          <span class="notice-date"><i class="ti ti-calendar"></i> ০৫ জানুয়ারি, ২০২৫</span>
-          <span class="notice-badge badge-event">অনুষ্ঠান</span>
-        </div>
-        <div class="notice-title">বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৫</div>
-        <div class="notice-body">আগামী ১৫ ফেব্রুয়ারি বার্ষিক ক্রীড়া প্রতিযোগিতা অনুষ্ঠিত হবে। সকলের অংশগ্রহণ কাম্য।</div>
-      </div>
-      <div class="notice-card reveal" onclick="openNotice('সরস্বতী পূজা উপলক্ষে বিদ্যালয় বন্ধ', 'সরস্বতী পূজা উপলক্ষে আগামী ২২ জানুয়ারি ২০২৫ বিদ্যালয় বন্ধ থাকবে। পরদিন ২৩ জানুয়ারি থেকে স্বাভাবিক ক্লাস শুরু হবে।')">
-        <div class="notice-meta">
-          <span class="notice-date"><i class="ti ti-calendar"></i> ২০ জানুয়ারি, ২০২৫</span>
-          <span class="notice-badge badge-holiday">ছুটি</span>
-        </div>
-        <div class="notice-title">সরস্বতী পূজা উপলক্ষে বিদ্যালয় বন্ধ</div>
-        <div class="notice-body">সরস্বতী পূজা উপলক্ষে ২২ জানুয়ারি বিদ্যালয় বন্ধ থাকবে।</div>
-      </div>
-      <div class="notice-card reveal" onclick="openNotice('অর্ধ-বার্ষিক পরীক্ষার ফলাফল প্রকাশ', '২০২৪ সালের অর্ধ-বার্ষিক পরীক্ষার ফলাফল প্রকাশিত হয়েছে। আগামী অভিভাবক সমাবেশ ২৫ জানুয়ারি।')">
-        <div class="notice-meta">
-          <span class="notice-date"><i class="ti ti-calendar"></i> ০১ জানুয়ারি, ২০২৫</span>
-          <span class="notice-badge badge-exam">পরীক্ষা</span>
-        </div>
-        <div class="notice-title">অর্ধ-বার্ষিক পরীক্ষার ফলাফল প্রকাশ</div>
-        <div class="notice-body">অর্ধ-বার্ষিক পরীক্ষার ফলাফল প্রকাশিত হয়েছে। রিপোর্ট কার্ড সংগ্রহ করুন।</div>
-      </div>
-      <div class="notice-card reveal" onclick="openNotice('নতুন কম্পিউটার ল্যাব উদ্বোধন', 'আধুনিক যন্ত্রপাতি সম্পন্ন নতুন কম্পিউটার ল্যাব আগামী ১ ফেব্রুয়ারি উদ্বোধন করা হবে। ল্যাবে ৩০টি আধুনিক কম্পিউটার থাকবে।')">
-        <div class="notice-meta">
-          <span class="notice-date"><i class="ti ti-calendar"></i> ২৮ ডিসেম্বর, ২০২৪</span>
-          <span class="notice-badge badge-event">উদ্বোধন</span>
-        </div>
-        <div class="notice-title">নতুন কম্পিউটার ল্যাব উদ্বোধন</div>
-        <div class="notice-body">আধুনিক কম্পিউটার ল্যাব উদ্বোধন হতে যাচ্ছে। ৩০টি নতুন কম্পিউটার ও ইন্টারনেট সংযোগ থাকবে।</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TEACHERS -->
-<section id="teachers">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-tag">শিক্ষকমণ্ডলী</span>
-      <h2 class="section-title">আমাদের অভিজ্ঞ শিক্ষকগণ</h2>
-      <p class="section-desc">বিশেষজ্ঞ ও নিবেদিতপ্রাণ শিক্ষকমণ্ডলী শিক্ষার্থীদের সাফল্যের পথে পথপ্রদর্শক।</p>
-    </div>
-    <div class="teachers-grid">
-      <div class="teacher-card reveal"><div class="teacher-avatar">আর</div><div class="teacher-name">মোঃ আব্দুর রহিম</div><div class="teacher-subject">প্রধান শিক্ষক</div><div class="teacher-qual">এম.এ, বি.এড (ঢাকা বিশ্ববিদ্যালয়)</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">কা</div><div class="teacher-name">মোসাঃ কামরুন নাহার</div><div class="teacher-subject">বাংলা বিভাগ</div><div class="teacher-qual">এম.এ (বাংলা), রাজশাহী বিশ্ববিদ্যালয়</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">হা</div><div class="teacher-name">মোঃ হাসানুজ্জামান</div><div class="teacher-subject">গণিত বিভাগ</div><div class="teacher-qual">এম.এস.সি (গণিত), যশোর বিশ্ববিদ্যালয়</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">সু</div><div class="teacher-name">সুলতানা পারভীন</div><div class="teacher-subject">বিজ্ঞান বিভাগ</div><div class="teacher-qual">এম.এস.সি (পদার্থবিজ্ঞান)</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">ই</div><div class="teacher-name">মোঃ ইকবাল হোসেন</div><div class="teacher-subject">ইংরেজি বিভাগ</div><div class="teacher-qual">এম.এ (ইংরেজি), ঢাকা বিশ্ববিদ্যালয়</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">রা</div><div class="teacher-name">রাহেলা বেগম</div><div class="teacher-subject">সামাজিক বিজ্ঞান</div><div class="teacher-qual">এম.এস.এস (অর্থনীতি)</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">জ</div><div class="teacher-name">মোঃ জহিরুল ইসলাম</div><div class="teacher-subject">ধর্ম ও নৈতিক শিক্ষা</div><div class="teacher-qual">এম.এ (ইসলামিক স্টাডিজ)</div></div>
-      <div class="teacher-card reveal"><div class="teacher-avatar">দী</div><div class="teacher-name">দীপালী রানী দাস</div><div class="teacher-subject">চারু ও কারুকলা</div><div class="teacher-qual">বি.এফ.এ (চারুকলা ইনস্টিটিউট)</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- RESULTS -->
-<section id="results" style="background:var(--bg-secondary);">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-tag">পরীক্ষার ফলাফল</span>
-      <h2 class="section-title">বোর্ড পরীক্ষার ফলাফল</h2>
-      <p class="section-desc">আমাদের শিক্ষার্থীদের অসাধারণ সাফল্যের গল্প।</p>
-    </div>
-    <div class="results-tabs reveal">
-      <button class="rtab active" id="tab-ssc" onclick="switchTab('ssc')">SSC ২০২৪</button>
-      <button class="rtab" id="tab-jsc" onclick="switchTab('jsc')">JSC ২০২৪</button>
-    </div>
-    <div id="panel-ssc" class="result-panel reveal">
-      <div class="results-table-wrap">
+      <div class="table-wrap">
         <table>
-          <thead><tr><th>রোল নম্বর</th><th>শিক্ষার্থীর নাম</th><th>বিভাগ</th><th>GPA</th><th>গ্রেড</th></tr></thead>
-          <tbody>
-            <tr><td>১০১২৩৪</td><td>রাহিমা বেগম</td><td>বিজ্ঞান</td><td>৫.০০</td><td><span class="result-grade grade-ap">A+</span></td></tr>
-            <tr><td>১০১২৩৫</td><td>মোঃ সাইফুল ইসলাম</td><td>বিজ্ঞান</td><td>৫.০০</td><td><span class="result-grade grade-ap">A+</span></td></tr>
-            <tr><td>১০১২৩৬</td><td>তানভীর আহমেদ</td><td>মানবিক</td><td>৪.৮৩</td><td><span class="result-grade grade-ap">A+</span></td></tr>
-            <tr><td>১০১২৩৭</td><td>সুমাইয়া আক্তার</td><td>বাণিজ্য</td><td>৪.৫০</td><td><span class="result-grade grade-a">A</span></td></tr>
-            <tr><td>১০১২৩৮</td><td>মোঃ রফিকুল ইসলাম</td><td>বিজ্ঞান</td><td>৪.১৭</td><td><span class="result-grade grade-a">A</span></td></tr>
-            <tr><td>১০১২৩৯</td><td>নাফিসা জান্নাত</td><td>মানবিক</td><td>৩.৮৩</td><td><span class="result-grade grade-am">A-</span></td></tr>
+          <thead><tr><th>তারিখ</th><th>শিরোনাম</th><th>ধরন</th><th>কার্যক্রম</th></tr></thead>
+          <tbody id="noticeTable">
+            <tr><td>১৫ জানু ২০২৫</td><td>JSC পরীক্ষার সময়সূচি ২০২৫</td><td><span class="badge badge-exam">পরীক্ষা</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>১০ জানু ২০২৫</td><td>৬ষ্ঠ শ্রেণিতে ভর্তি বিজ্ঞপ্তি ২০২৫</td><td><span class="badge badge-admission">ভর্তি</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>০৫ জানু ২০২৫</td><td>বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৫</td><td><span class="badge badge-event">অনুষ্ঠান</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>২০ জানু ২০২৫</td><td>সরস্বতী পূজা উপলক্ষে বিদ্যালয় বন্ধ</td><td><span class="badge badge-holiday">ছুটি</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div id="panel-jsc" class="result-panel reveal" style="display:none;">
-      <div class="results-table-wrap">
+
+    <!-- RESULTS -->
+    <div class="panel" id="panel-results">
+      <div class="panel-header">
+        <div class="panel-title">পরীক্ষার ফলাফল</div>
+        <button class="add-btn" onclick="openModal('result')"><i class="ti ti-plus"></i> ফলাফল যোগ করুন</button>
+      </div>
+      <div class="table-wrap">
         <table>
-          <thead><tr><th>রোল নম্বর</th><th>শিক্ষার্থীর নাম</th><th>GPA</th><th>গ্রেড</th></tr></thead>
-          <tbody>
-            <tr><td>৭০১২৩৪</td><td>আয়েশা সিদ্দিকা</td><td>৫.০০</td><td><span class="result-grade grade-ap">A+</span></td></tr>
-            <tr><td>৭০১২৩৫</td><td>মোঃ আরিফুল হক</td><td>৪.৬৭</td><td><span class="result-grade grade-ap">A+</span></td></tr>
-            <tr><td>৭০১২৩৬</td><td>ফারিহা ইসলাম</td><td>৪.৩৩</td><td><span class="result-grade grade-a">A</span></td></tr>
-            <tr><td>৭০১২৩৭</td><td>মোঃ শরিফুল ইসলাম</td><td>৩.৫০</td><td><span class="result-grade grade-am">A-</span></td></tr>
-            <tr><td>৭০১২৩৮</td><td>সাবিনা ইয়াসমিন</td><td>৩.০০</td><td><span class="result-grade grade-b">B</span></td></tr>
+          <thead><tr><th>রোল নম্বর</th><th>নাম</th><th>পরীক্ষা</th><th>GPA</th><th>গ্রেড</th><th>কার্যক্রম</th></tr></thead>
+          <tbody id="resultTable">
+            <tr><td>১০১২৩৪</td><td>রাহিমা বেগম</td><td>SSC ২০২৪</td><td>৫.০০</td><td><span class="badge badge-event">A+</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>১০১২৩৫</td><td>মোঃ সাইফুল ইসলাম</td><td>SSC ২০২৪</td><td>৫.০০</td><td><span class="badge badge-event">A+</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>৭০১২৩৪</td><td>আয়েশা সিদ্দিকা</td><td>JSC ২০২৪</td><td>৫.০০</td><td><span class="badge badge-event">A+</span></td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
           </tbody>
         </table>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-tag">ফটো গ্যালারি</span>
-      <h2 class="section-title">আমাদের মুহূর্তগুলো</h2>
-      <p class="section-desc">বিদ্যালয়ের বিভিন্ন কার্যক্রম ও স্মরণীয় মুহূর্তের ছবি।</p>
-    </div>
-    <div class="gallery-grid reveal">
-      <div class="gallery-item large">
-        <img src="assets/images/school-bg.jpg.jpg" alt="বিদ্যালয় ভবন" style="width:100%;height:100%;object-fit:cover;" />
-        <div class="gallery-overlay"><i class="ti ti-zoom-in" style="font-size:2rem;color:white;"></i></div>
+    <!-- TEACHERS PANEL -->
+    <div class="panel" id="panel-teachers">
+      <div class="panel-header">
+        <div class="panel-title">শিক্ষকমণ্ডলী</div>
+        <button class="add-btn" onclick="openModal('teacher')"><i class="ti ti-plus"></i> শিক্ষক যোগ করুন</button>
       </div>
-      <div class="gallery-item">
-        <img src="assets/images/images (3).jpeg" alt="বার্ষিক অনুষ্ঠান" style="width:100%;height:100%;object-fit:cover;" />
-        <div class="gallery-overlay"><i class="ti ti-zoom-in" style="font-size:1.5rem;color:white;"></i></div>
-      </div>
-      <div class="gallery-item">
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--text-muted);">
-          <div style="font-size:2.5rem;opacity:0.3;">🔬</div>
-          <div style="font-size:12px;">বিজ্ঞান ল্যাব</div>
-        </div>
-        <div class="gallery-overlay"><i class="ti ti-zoom-in" style="font-size:1.5rem;color:white;"></i></div>
-      </div>
-      <div class="gallery-item">
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--text-muted);">
-          <div style="font-size:2.5rem;opacity:0.3;">⚽</div>
-          <div style="font-size:12px;">ক্রীড়া অনুষ্ঠান</div>
-        </div>
-        <div class="gallery-overlay"><i class="ti ti-zoom-in" style="font-size:1.5rem;color:white;"></i></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>নাম</th><th>বিষয়</th><th>যোগ্যতা</th><th>কার্যক্রম</th></tr></thead>
+          <tbody id="teacherTable">
+            <tr><td>মোঃ আব্দুর রহিম</td><td>প্রধান শিক্ষক</td><td>এম.এ, বি.এড</td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>মোসাঃ কামরুন নাহার</td><td>বাংলা</td><td>এম.এ (বাংলা)</td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+            <tr><td>মোঃ হাসানুজ্জামান</td><td>গণিত</td><td>এম.এস.সি (গণিত)</td><td><div class="action-btns"><button class="edit-btn">সম্পাদনা</button><button class="del-btn" onclick="delRow(this)">মুছুন</button></div></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ADMISSION -->
-<section id="admission">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-tag">ভর্তি তথ্য</span>
-      <h2 class="section-title">আমাদের বিদ্যালয়ে যোগ দিন</h2>
-      <p class="section-desc">সহজ কয়েকটি ধাপে ভর্তি প্রক্রিয়া সম্পন্ন করুন।</p>
-    </div>
-    <div class="admission-grid">
-      <div class="admission-steps reveal">
-        <h3 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:1.5rem;">ভর্তির ধাপসমূহ</h3>
-        <div class="adm-step"><div class="adm-step-num">১</div><div><div class="adm-step-title">আবেদন ফর্ম পূরণ</div><div class="adm-step-desc">অনলাইনে বা সরাসরি বিদ্যালয়ে এসে আবেদন ফর্ম সংগ্রহ ও পূরণ করুন।</div></div></div>
-        <div class="adm-step"><div class="adm-step-num">২</div><div><div class="adm-step-title">প্রয়োজনীয় কাগজপত্র জমা</div><div class="adm-step-desc">জন্ম সনদ, আগের বিদ্যালয়ের সনদ, ৪ কপি পাসপোর্ট সাইজের ছবি জমা দিন।</div></div></div>
-        <div class="adm-step"><div class="adm-step-num">৩</div><div><div class="adm-step-title">ভর্তি পরীক্ষা</div><div class="adm-step-desc">নির্ধারিত তারিখে বাংলা, ইংরেজি ও গণিতে ভর্তি পরীক্ষা দিন।</div></div></div>
-        <div class="adm-step"><div class="adm-step-num">৪</div><div><div class="adm-step-title">ফলাফল ও ভর্তি নিশ্চিতকরণ</div><div class="adm-step-desc">ফলাফল প্রকাশের পর নির্ধারিত ফি জমা দিয়ে ভর্তি নিশ্চিত করুন।</div></div></div>
-        <div style="margin-top:1.5rem;padding:1.25rem;background:var(--accent-dim);border:1px solid var(--border);border-radius:var(--radius);">
-          <p style="font-size:13px;color:var(--accent);font-weight:600;margin-bottom:6px;">📅 গুরুত্বপূর্ণ তারিখ</p>
-          <p style="font-size:13px;color:var(--text-secondary);">আবেদনের শেষ তারিখ: ৩১ জানুয়ারি ২০২৫</p>
-          <p style="font-size:13px;color:var(--text-secondary);">ভর্তি পরীক্ষা: ০৫ ফেব্রুয়ারি ২০২৫</p>
-          <p style="font-size:13px;color:var(--text-secondary);">ফলাফল: ১০ ফেব্রুয়ারি ২০২৫</p>
-        </div>
+    <!-- ADMISSIONS PANEL -->
+    <div class="panel" id="panel-admissions">
+      <div class="panel-header">
+        <div class="panel-title">ভর্তির আবেদনসমূহ</div>
       </div>
-      <div class="admission-form reveal">
-        <div id="admissionForm">
-          <div class="form-title">ভর্তির আবেদন করুন</div>
-          <div class="form-subtitle">ফর্মটি পূরণ করুন, আমরা শীঘ্রই যোগাযোগ করব।</div>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">শিক্ষার্থীর নাম</label><input type="text" class="form-input" placeholder="পুরো নাম লিখুন" /></div>
-            <div class="form-group"><label class="form-label">শ্রেণি</label><select class="form-select"><option value="">শ্রেণি বেছে নিন</option><option>৬ষ্ঠ শ্রেণি</option><option>৭ম শ্রেণি</option><option>৮ম শ্রেণি</option><option>৯ম শ্রেণি</option><option>১০ম শ্রেণি</option></select></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">পিতার নাম</label><input type="text" class="form-input" placeholder="পিতার নাম" /></div>
-            <div class="form-group"><label class="form-label">মাতার নাম</label><input type="text" class="form-input" placeholder="মাতার নাম" /></div>
-          </div>
-          <div class="form-group"><label class="form-label">মোবাইল নম্বর</label><input type="tel" class="form-input" placeholder="০১XXXXXXXXX" /></div>
-          <div class="form-group"><label class="form-label">ঠিকানা</label><textarea class="form-textarea" placeholder="সম্পূর্ণ ঠিকানা লিখুন..."></textarea></div>
-          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitForm(event)"><i class="ti ti-send"></i> আবেদন জমা দিন</button>
-        </div>
-        <div class="form-success" id="formSuccess">
-          <div style="font-size:3rem;margin-bottom:1rem;">✅</div>
-          <div style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">আবেদন সফলভাবে জমা হয়েছে!</div>
-          <div style="font-size:13px;color:var(--text-secondary);">আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।</div>
-        </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>নাম</th><th>শ্রেণি</th><th>মোবাইল</th><th>তারিখ</th><th>কার্যক্রম</th></tr></thead>
+          <tbody id="admTable">
+            <tr><td>রিফাত হোসেন</td><td>৬ষ্ঠ শ্রেণি</td><td>০১৭XXXXXXXX</td><td>১৮ জানু ২০২৫</td><td><div class="action-btns"><button class="edit-btn">অনুমোদন</button><button class="del-btn" onclick="delRow(this)">বাতিল</button></div></td></tr>
+            <tr><td>সানজিদা আক্তার</td><td>৭ম শ্রেণি</td><td>০১৮XXXXXXXX</td><td>১৭ জানু ২০২৫</td><td><div class="action-btns"><button class="edit-btn">অনুমোদন</button><button class="del-btn" onclick="delRow(this)">বাতিল</button></div></td></tr>
+            <tr><td>মোঃ জুবায়ের</td><td>৯ম শ্রেণি</td><td>০১৯XXXXXXXX</td><td>১৬ জানু ২০২৫</td><td><div class="action-btns"><button class="edit-btn">অনুমোদন</button><button class="del-btn" onclick="delRow(this)">বাতিল</button></div></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- CONTACT -->
-<section id="contact" style="background:var(--bg-secondary);">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-tag">যোগাযোগ</span>
-      <h2 class="section-title">আমাদের সাথে যোগাযোগ করুন</h2>
-      <p class="section-desc">যেকোনো প্রশ্ন বা তথ্যের জন্য নির্দ্বিধায় যোগাযোগ করুন।</p>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-info reveal">
-        <div class="contact-card"><div class="contact-icon"><i class="ti ti-map-pin"></i></div><div><div class="contact-card-title">ঠিকানা</div><div class="contact-card-value">সাগরদাঁড়ি, কেশবপুর উপজেলা<br>যশোর, বাংলাদেশ</div></div></div>
-        <div class="contact-card"><div class="contact-icon"><i class="ti ti-phone"></i></div><div><div class="contact-card-title">ফোন নম্বর</div><div class="contact-card-value">০১XXXXXXXXX<br>০১XXXXXXXXX</div></div></div>
-        <div class="contact-card"><div class="contact-icon"><i class="ti ti-mail"></i></div><div><div class="contact-card-title">ইমেইল</div><div class="contact-card-value">smmdschool@gmail.com</div></div></div>
-        <div class="contact-card"><div class="contact-icon"><i class="ti ti-clock"></i></div><div><div class="contact-card-title">অফিস সময়</div><div class="contact-card-value">শনি–বৃহস্পতি: সকাল ৯টা – বিকেল ৪টা</div></div></div>
-      </div>
-      <div class="reveal">
-        <div class="map-wrap">
-          <div class="map-icon">🗺️</div>
-          <div>Google Map এখানে যোগ করুন</div>
-          <div style="font-size:12px;margin-top:4px;">Google Maps embed code paste করুন</div>
-        </div>
+    <!-- SETTINGS -->
+    <div class="panel" id="panel-settings">
+      <div class="panel-header"><div class="panel-title">স্কুলের তথ্য আপডেট</div></div>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:2rem;max-width:600px;">
+        <div class="form-group"><label class="form-label">স্কুলের নাম</label><input class="form-input" value="Sagordari Michael Madhusudhan Datta School" /></div>
+        <div class="form-group"><label class="form-label">ঠিকানা</label><input class="form-input" value="সাগরদাঁড়ি, কেশবপুর উপজেলা, যশোর" /></div>
+        <div class="form-group"><label class="form-label">ফোন নম্বর</label><input class="form-input" value="০১XXXXXXXXX" /></div>
+        <div class="form-group"><label class="form-label">ইমেইল</label><input class="form-input" value="smmdschool@gmail.com" /></div>
+        <div class="form-group"><label class="form-label">প্রধান শিক্ষকের নাম</label><input class="form-input" value="মোঃ আব্দুর রহিম" /></div>
+        <div class="form-group"><label class="form-label">Facebook Page Link</label><input class="form-input" placeholder="https://facebook.com/..." /></div>
+        <button class="save-btn" onclick="showToast('তথ্য সংরক্ষিত হয়েছে!')">সংরক্ষণ করুন</button>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand-name">Sagordari M.M.D. School</div>
-        <div class="footer-brand-tagline">মহাকবি মাইকেল মধুসূদন দত্তের স্মৃতিবিজড়িত সাগরদাঁড়িতে অবস্থিত এই বিদ্যালয় ৬০ বছরেরও বেশি সময় ধরে শিক্ষার আলো ছড়িয়ে আসছে।</div>
-        <div style="display:flex;gap:10px;">
-          <a href="#" style="width:36px;height:36px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);text-decoration:none;"><i class="ti ti-brand-facebook"></i></a>
-          <a href="#" style="width:36px;height:36px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);text-decoration:none;"><i class="ti ti-brand-youtube"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">দ্রুত লিংক</div>
-        <ul><li><a href="#about">আমাদের সম্পর্কে</a></li><li><a href="#notices">নোটিশ বোর্ড</a></li><li><a href="#teachers">শিক্ষকমণ্ডলী</a></li><li><a href="#results">পরীক্ষার ফলাফল</a></li><li><a href="#gallery">গ্যালারি</a></li></ul>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">ভর্তি</div>
-        <ul><li><a href="#admission">ভর্তি তথ্য</a></li><li><a href="#admission">আবেদন করুন</a></li><li><a href="#admission">প্রয়োজনীয় কাগজ</a></li><li><a href="#admission">ভর্তি ফি</a></li></ul>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">যোগাযোগ</div>
-        <ul><li><a href="#">সাগরদাঁড়ি, কেশবপুর</a></li><li><a href="#">যশোর, বাংলাদেশ</a></li><li><a href="#">০১XXXXXXXXX</a></li><li><a href="#">smmdschool@gmail.com</a></li></ul>
+    <!-- PASSWORD -->
+    <div class="panel" id="panel-password">
+      <div class="panel-header"><div class="panel-title">পাসওয়ার্ড পরিবর্তন</div></div>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:2rem;max-width:400px;">
+        <div class="form-group"><label class="form-label">বর্তমান পাসওয়ার্ড</label><input type="password" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">নতুন পাসওয়ার্ড</label><input type="password" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">নতুন পাসওয়ার্ড নিশ্চিত করুন</label><input type="password" class="form-input" /></div>
+        <button class="save-btn" onclick="showToast('পাসওয়ার্ড পরিবর্তন হয়েছে!')">পরিবর্তন করুন</button>
       </div>
     </div>
-    <div class="footer-bottom">
-      <div class="footer-bottom-text">© ২০২৫ <span>Sagordari Michael Madhusudhan Institution</span>। সকল অধিকার সংরক্ষিত।</div>
-      <div class="footer-bottom-text">ডিজাইন ও ডেভেলপমেন্ট: <span>SMMD School Team</span></div>
-    </div>
-  </div>
-</footer>
 
-<!-- NOTICE MODAL -->
-<div class="modal-overlay" id="noticeModal">
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="mainModal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
-    <div class="modal-title" id="modalTitle"></div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-title" id="modalHeading">নতুন নোটিশ যোগ করুন</div>
+    <div id="modalContent"></div>
+    <div class="modal-actions">
+      <button class="cancel-btn" onclick="closeMainModal()">বাতিল</button>
+      <button class="save-btn" onclick="saveModal()">সংরক্ষণ করুন</button>
+    </div>
   </div>
 </div>
 
-<script src="assets/js/main.js"></script>
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="ti ti-circle-check"></i> <span id="toastMsg"></span></div>
+
+<script>
+// ── AUTH ──
+const CREDS = { user: 'admin', pass: 'smmd2025' };
+function doLogin() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if (u === CREDS.user && p === CREDS.pass) {
+    document.getElementById('loginScreen').style.display = 'none';
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+function logout() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+}
+
+// ── PANEL SWITCH ──
+const titles = {
+  dashboard: 'ড্যাশবোর্ড', notices: 'নোটিশ বোর্ড', results: 'পরীক্ষার ফলাফল',
+  teachers: 'শিক্ষকমণ্ডলী', admissions: 'ভর্তির আবেদন', settings: 'স্কুলের তথ্য', password: 'পাসওয়ার্ড'
+};
+function showPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = titles[id];
+}
+
+// ── DELETE ROW ──
+function delRow(btn) {
+  if (confirm('এই তথ্যটি মুছে ফেলতে চান?')) {
+    btn.closest('tr').remove();
+    showToast('সফলভাবে মুছে ফেলা হয়েছে!');
+  }
+}
+
+// ── MODAL ──
+const forms = {
+  notice: `
+    <div class="form-group"><label class="form-label">শিরোনাম</label><input class="form-input" placeholder="নোটিশের শিরোনাম" /></div>
+    <div class="form-group"><label class="form-label">তারিখ</label><input type="date" class="form-input" /></div>
+    <div class="form-group"><label class="form-label">ধরন</label>
+      <select class="form-select"><option>পরীক্ষা</option><option>অনুষ্ঠান</option><option>ছুটি</option><option>ভর্তি</option></select></div>
+    <div class="form-group"><label class="form-label">বিস্তারিত</label><textarea class="form-textarea" placeholder="নোটিশের বিস্তারিত..."></textarea></div>`,
+  result: `
+    <div class="form-group"><label class="form-label">রোল নম্বর</label><input class="form-input" placeholder="রোল নম্বর" /></div>
+    <div class="form-group"><label class="form-label">শিক্ষার্থীর নাম</label><input class="form-input" placeholder="পুরো নাম" /></div>
+    <div class="form-group"><label class="form-label">পরীক্ষা</label>
+      <select class="form-select"><option>SSC ২০২৪</option><option>JSC ২০২৪</option><option>SSC ২০২৫</option></select></div>
+    <div class="form-group"><label class="form-label">GPA</label><input class="form-input" placeholder="৫.০০" /></div>
+    <div class="form-group"><label class="form-label">গ্রেড</label>
+      <select class="form-select"><option>A+</option><option>A</option><option>A-</option><option>B</option><option>C</option></select></div>`,
+  teacher: `
+    <div class="form-group"><label class="form-label">শিক্ষকের নাম</label><input class="form-input" placeholder="পুরো নাম" /></div>
+    <div class="form-group"><label class="form-label">বিষয়</label><input class="form-input" placeholder="বাংলা, গণিত..." /></div>
+    <div class="form-group"><label class="form-label">শিক্ষাগত যোগ্যতা</label><input class="form-input" placeholder="এম.এ, বি.এড..." /></div>
+    <div class="form-group"><label class="form-label">মোবাইল</label><input class="form-input" placeholder="০১XXXXXXXXX" /></div>`
+};
+const headings = { notice: 'নতুন নোটিশ যোগ করুন', result: 'ফলাফল যোগ করুন', teacher: 'শিক্ষক যোগ করুন' };
+let currentModal = '';
+function openModal(type) {
+  currentModal = type;
+  document.getElementById('modalHeading').textContent = headings[type];
+  document.getElementById('modalContent').innerHTML = forms[type];
+  document.getElementById('mainModal').classList.add('open');
+}
+function closeMainModal() { document.getElementById('mainModal').classList.remove('open'); }
+function saveModal() {
+  closeMainModal();
+  showToast('সফলভাবে সংরক্ষণ হয়েছে!');
+}
+document.getElementById('mainModal').addEventListener('click', function(e) {
+  if (e.target === this) closeMainModal();
+});
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
 </body>
 </html>
